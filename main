@@ -1,0 +1,33 @@
+# Strategy is, since all entries are real numbers, the triplets of sum zero must be either 2(1) non-negatives with 1(2) negatives, OR 3 zeroes. Below's the code:
+
+s=0                               # count of triplets
+A=list(map(int,input()))
+Ap=sorted([a for a in A if a>= 0])
+Am=sorted([a for a in A if a<  0])
+
+if Ap.count(0)>2:                 # the 3 zeroes case
+  s+=1
+
+d={}                              # dict for pairs
+
+m=len(Ap)
+for b in range(1,m):
+  for c in range(b):
+    k=-1*(Ap[b]+Ap[c])
+    if k in Am:
+      d[k]=d.get(k,[])+[(Ap[b],Ap[c])]            
+
+n=len(Am)
+for b in range(1,n):
+  for c in range(b):
+    k=-1*(Am[b]+Am[c])
+    if k in Ap:
+      d[k]=d.get(k,[])+[(Am[b],Am[c])]            # a dict of all +/- numbers in the list that happens to be a sum of two other entries in the list, each of which being a dict value.
+      
+for v in list(d.values()):
+  v=set(v)                          # Remove duplicates. Note the dict key is unique, so we don't need to worry on this side.
+
+for k in d:
+  s+= len(d[k])                     # Each entry in d[k] represents a unique combination of (non-)negatives whose sum is the opposite of something else in the list, excl. (0,0).
+  
+print(s)
